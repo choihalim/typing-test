@@ -13,7 +13,7 @@ class User:
     
     @first_initial.setter
     def first_initial(self, initial):
-        if type(initial) is str and len() == 1:
+        if type(initial) is str and len(initial) == 1:
             self._first_initial = initial
         else: 
             raise Exception("First initial must be a string and equal 1 character")
@@ -40,7 +40,7 @@ class User:
     def create_table(cls):
         CURSOR.execute("""
             CREATE TABLE IF NOT EXISTS user(
-                user_id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY,
                 first_initial TEXT,
                 last_initial TEXT
             )
@@ -56,25 +56,25 @@ class User:
                 VALUES ('{user.first_initial}', '{user.last_initial}')
             """
         )
-        new_user_id= CURSOR.execute( 'SELECT last_insert_rowid() FROM patients').fetchone()[0]
+        new_user_id= CURSOR.execute( 'SELECT last_insert_rowid() FROM user').fetchone()[0]
         return cls.find_by_id(new_user_id)
 
     @classmethod
     def find_by_id(cls, id):
         if type(id) is int and id > 0:
-            sql = f"SELECT * FROM users WHERE id= {id}"
+            sql = f"SELECT * FROM user WHERE id= {id}"
             new_user= CURSOR.execute(sql).fetchone()
             if new_user :
                 return cls.db_into_instance(new_user)
             else :
-                raise Exception("Could not find USer with that ID.")
+                raise Exception("Could not find User with that ID.")
         else :
             raise Exception ("ID entered must be an integer greater than 0.")
         
     @classmethod
     def find_by_name(cls, name):
         if type is str and len(name) > 0 :
-            sql = f"SELECT * FROM users where first_initial LIKE '{name}' OR last_initial LIKE '{name}'"
+            sql = f"SELECT * FROM user where first_initial LIKE '{name}' OR last_initial LIKE '{name}'"
             users = CURSOR.execute(sql).fetchall()
             if users:
                 return [cls.db_into_instance(user)for user in users]
@@ -86,7 +86,7 @@ class User:
 
     @classmethod
     def all (cls):
-        sql ="SELECT * FROM users"
+        sql ="SELECT * FROM user"
 
         users = CURSOR.execute(sql).fetchall()
         return [cls.db_into_instance(user) for user in users]

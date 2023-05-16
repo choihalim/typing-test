@@ -1,6 +1,6 @@
 from . import CONN, CURSOR 
 from time import sleep
-import ipdb
+
 
 class Game:
     pass
@@ -12,15 +12,14 @@ class Game:
         self.set_user(user)
 
     def start_game(self):
+
+        attempt = input("Enter the word: ")
         
         for i in range(60, 0, -1):
             print(f"Time Remaining: {i}", "\r", end="")
-            attempt = input()
+            
             # attempt = input("")
             sleep(1)
-
-
-    ipdb.set_trace()
 
     def get_user(self):
         return self._user
