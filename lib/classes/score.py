@@ -1,4 +1,4 @@
-from . import CONN, CURSOR
+from utils import CONN, CURSOR
 from datetime import date
 
 class Score:
