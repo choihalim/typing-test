@@ -27,6 +27,24 @@ class Game:
             else:
                 print("Error:", response.status_code, response.text)
         return words
+    
+    def calculate_wpm(self, attempted_words):
+        count = 0
+        for word in attempted_words:
+            if word != "" and len(word) > 1:
+                count += 1
+        return count
+    
+    def calculate_acc(self, attempted_words):
+        copy_words = self._words[:]
+        total_words = len(attempted_words)
+        if len(attempted_words) < len(copy_words):
+            copy_words = copy_words[:len(attempted_words)]
+        
+        matching_elements = sum(1 for x, y in zip(attempted_words, copy_words) if x == y)
+        accuracy = matching_elements / total_words * 100
+        
+        return f"{str(accuracy)} %"
 
     def start_game(self):
         def clear_screen():
@@ -63,10 +81,10 @@ class Game:
                 sleep(1)
             
             clear_screen()
-            line = "*" * 50
-            print(line)
+            star_line = "*" * 50
+            print(star_line)
             print("Game Finished!")
-            print(line)
+            print(star_line)
             print()
 
             input_thread.join(1)
@@ -76,8 +94,12 @@ class Game:
         user_inputs = user_input(timeout=5)
 
         # calculate score here
-        print("User inputs:", user_inputs)
-        print("Number of Attempts:", len(user_inputs))
+        # print("User inputs:", user_inputs)
+        dot_line = "-" * 50
+        print(f"User: {self._user.first_initial}{self._user.last_initial}\n\nScore:")
+        print(dot_line)
+        print("WPM: ", self.calculate_wpm(user_inputs))
+        print("Accuracy: ", self.calculate_acc(user_inputs))
 
     def get_user(self):
         return self._user
