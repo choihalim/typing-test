@@ -9,7 +9,7 @@ faker = Faker()
 User.create_table()
 Score.create_table()
 # Game.start_game("hello")
-u1 = User("h", "c")
+u1 = User("h", "c", 1)
 g1 = Game(u1)
 
 for n in range(0, 5):

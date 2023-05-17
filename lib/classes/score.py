@@ -41,7 +41,7 @@ class Score:
                 wpm INTEGER,
                 accuracy FLOAT,
                 date TEXT,
-                FOREIGN KEY (user_id) REFERENCES users(id)
+                FOREIGN KEY (user_id) REFERENCES users (id)
             )
         """)
         print("Score table creation attempted. Please check your console")
@@ -57,6 +57,7 @@ class Score:
             CURSOR.execute(sql)
             score_id = CURSOR.execute('SELECT last_insert_rowid() FROM scores').fetchone()[0]
             new_score = CURSOR.execute(f'SELECT * FROM scores WHERE id = {score_id}').fetchone()
+            CONN.commit()
             return new_score
         else:
             raise Exception('Could not create score. Check data and try again.')
