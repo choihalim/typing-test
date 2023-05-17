@@ -4,7 +4,7 @@ from threading import Thread
 import os
 import requests
 import json
-from classes.score import Score
+from score import Score
 from datetime import datetime
 
 class Game:
@@ -98,7 +98,7 @@ class Game:
         # calculate score here
         # print("User inputs:", user_inputs)
         dot_line = "-" * 50
-        print(f"User: {self._user.first_initial}{self._user.last_initial}\n\nScore:")
+        print(f"User: {self._user.username}\n\nScore:")
         print(dot_line)
         print("WPM: ", self.calculate_wpm(user_inputs))
         print("Accuracy: ", f"{self.calculate_acc(user_inputs)} %")
@@ -108,7 +108,7 @@ class Game:
         return self._user
 
     def set_user(self, user):
-        from classes.user import User
+        from user import User
         if isinstance(user, User):
             self._user = user
         else:
