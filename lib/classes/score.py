@@ -59,3 +59,4 @@ class Score:
         sql = "SELECT * FROM scores"
         scores = CURSOR.execute(sql).fetchall()
         return scores
+
