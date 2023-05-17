@@ -1,5 +1,5 @@
-from . import CONN, CURSOR
-import re
+from utils import CONN, CURSOR
+
 
 class User:
     def __init__(self, username, id=None):
