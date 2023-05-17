@@ -20,9 +20,16 @@ class Score:
             raise Exception("Date must be a string greater than 0 and less than or equal to 10 characters long.")
 
     def update_user_wpm(self, wpm):
+        if type(wpm) != int or wpm < 50 or wpm > 100:
+            raise Exception("WPM must be an integer between 50 and 100.")
+
         self.wpm = wpm
 
+
     def update_user_acc(self, acc):
+        if type(acc) != str or not acc.endswith('%'):
+            raise Exception("Accuracy must be a percentage.")
+
         self.accuracy = acc
 
     @classmethod
