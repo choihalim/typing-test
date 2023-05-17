@@ -31,6 +31,11 @@ class User:
 
     @classmethod
     def create(cls, username):
+        existing_user = cls.find_by_username(username)
+        if existing_user:
+            raise Exception("Username already exists. Please choose a different username.")
+        
+        
         user = User(username)
         CURSOR.execute(f"""
             INSERT INTO users (username)
