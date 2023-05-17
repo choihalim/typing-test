@@ -29,13 +29,6 @@ class User:
         else: 
             raise Exception("Last initial must be a string and equal 1 character")
 
-
-    def update_user_wpm(self, wpm):
-        pass
-
-    def update_user_acc(self, acc):
-        pass
-
     @classmethod
     def create_table(cls):
         CURSOR.execute("""
