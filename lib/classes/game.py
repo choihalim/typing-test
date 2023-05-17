@@ -2,18 +2,31 @@
 from time import sleep, time
 from threading import Thread
 import os
-import sys
-
-import ipdb
+import requests
+import json
 
 class Game:
-    pass
 
-    def __init__(self, user, words):
+    def __init__(self, user):
         self._user = None
         self._words = []
 
         self.set_user(user)
+        self.set_words(self.generate_words())
+
+    # generates list of ten words
+    def generate_words(self):
+        words = []
+        api_url = 'https://api.api-ninjas.com/v1/randomword'
+        for _ in range(10):
+            response = requests.get(api_url, headers={'X-Api-Key': 'PF/hqSpAr1VyOEOUwNwYaA==HUK817VPrQuOaZgA'})
+            if response.status_code == requests.codes.ok:
+                parsed_data = json.loads(response.text)
+                word = parsed_data["word"]
+                words.append(word)
+            else:
+                print("Error:", response.status_code, response.text)
+        return words
 
     def start_game(self):
         def clear_screen():
@@ -22,43 +35,49 @@ class Game:
             else:
                 os.system("clear")  # For Linux and macOS
 
-        def user_input(timeout=60):
+        def user_input(timeout=10):
             inputs = []
+            index = 0
             end_time = time() + timeout
 
             def input_thread():
                 nonlocal inputs
                 nonlocal end_time
+                nonlocal index
                 while time() < end_time:
+                    word = self._words[index]
+                    remaining_seconds = max(0, int(end_time - time()))
+                    print(f"\rSeconds remaining: {remaining_seconds}\n\n{word}: ", end="")
                     user_input = input()
                     inputs.append(user_input)
-                    # clear_screen()
-                    # print(f"Seconds remaining: {max(0, int(end_time - time()))}")
-                    
+                    index += 1
+                    clear_screen()
+            
             input_thread = Thread(target=input_thread)
             input_thread.start()
 
             while input_thread.is_alive() and time() < end_time:
-                remaining_seconds = max(0, int(end_time - time()))
                 clear_screen()
-                # print(f"Seconds remaining: {remaining_seconds}")
-                print(f"Seconds remaining: {remaining_seconds}", end="\n", flush=True)
-                
+                remaining_seconds = max(0, int(end_time - time()))
+                print(f"\rSeconds remaining: {remaining_seconds}\n\n{self._words[index]}: ", end="", flush=True)
                 sleep(1)
-
+            
             clear_screen()
-            if remaining_seconds == 0:
-                print("Input timeout reached.")
-                sleep(1)
+            line = "*" * 50
+            print(line)
+            print("Game Finished!")
+            print(line)
             print()
-            input_thread.join(timeout)
+
+            input_thread.join(1)
 
             return inputs
         
-        user_inputs = user_input(timeout=60)
-        print("User inputs:", user_inputs)
+        user_inputs = user_input(timeout=5)
 
-    ipdb.set_trace()
+        # calculate score here
+        print("User inputs:", user_inputs)
+        print("Number of Attempts:", len(user_inputs))
 
     def get_user(self):
         return self._user
@@ -73,8 +92,8 @@ class Game:
     def get_words(self):
         return self._words
     
-    def set_words(self):
-        pass
+    def set_words(self, words):
+        self._words = words
     
     user = property(get_user, set_user)
     words = property(get_words, set_words)
