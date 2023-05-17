@@ -4,6 +4,8 @@ from threading import Thread
 import os
 import requests
 import json
+from classes.score import Score
+from datetime import datetime
 
 class Game:
 
@@ -44,7 +46,7 @@ class Game:
         matching_elements = sum(1 for x, y in zip(attempted_words, copy_words) if x == y)
         accuracy = matching_elements / total_words * 100
         
-        return f"{str(accuracy)} %"
+        return accuracy
 
     def start_game(self):
         def clear_screen():
@@ -99,7 +101,8 @@ class Game:
         print(f"User: {self._user.first_initial}{self._user.last_initial}\n\nScore:")
         print(dot_line)
         print("WPM: ", self.calculate_wpm(user_inputs))
-        print("Accuracy: ", self.calculate_acc(user_inputs))
+        print("Accuracy: ", f"{self.calculate_acc(user_inputs)} %")
+        Score.create(self.user.id, self.calculate_wpm(user_inputs), self.calculate_acc(user_inputs), datetime.now().date())
 
     def get_user(self):
         return self._user

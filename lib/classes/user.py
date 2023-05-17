@@ -50,6 +50,7 @@ class User:
             """
         )
         new_user_id= CURSOR.execute( 'SELECT last_insert_rowid() FROM users').fetchone()[0]
+        CONN.commit()
         return cls.find_by_id(new_user_id)
 
     @classmethod
