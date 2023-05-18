@@ -7,11 +7,11 @@ class Score:
         self.wpm = wpm
         self.accuracy = accuracy
         self._date = date
-    
+
     @property
     def date(self):
         return self._date
-    
+
     @date.setter
     def date(self, date):
         if type(date) is str and 0 < len(date) <= 10:
@@ -20,17 +20,25 @@ class Score:
             raise Exception("Date must be a string greater than 0 and less than or equal to 10 characters long.")
 
     def update_user_wpm(self, wpm):
-        if type(wpm) != int or wpm < 50 or wpm > 100:
-            raise Exception("WPM must be an integer between 50 and 100.")
+        if type(wpm) is not int or wpm < 0 or wpm > 100:
+            raise Exception("WPM must be an integer between 0 and 100.")
 
         self.wpm = wpm
 
-
     def update_user_acc(self, acc):
-        if type(acc) != str or not acc.endswith('%'):
+        if type(acc) is not str or not acc.endswith('%'):
             raise Exception("Accuracy must be a percentage.")
 
         self.accuracy = acc
+
+    @classmethod
+    def find_by_username(cls, username):
+        if type(username) is str and len(username) > 0:
+            sql = f"SELECT * FROM scores WHERE user_id IN (SELECT id FROM users WHERE username = '{username}')"
+            scores = CURSOR.execute(sql).fetchall()
+            return scores
+        else:
+            raise Exception("Username must be a non-empty string.")
 
     @classmethod
     def create_table(cls):
@@ -61,10 +69,9 @@ class Score:
             return new_score
         else:
             raise Exception('Could not create score. Check data and try again.')
-        
+
     @classmethod
     def all(cls):
         sql = "SELECT * FROM scores"
         scores = CURSOR.execute(sql).fetchall()
         return scores
-

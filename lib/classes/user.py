@@ -67,6 +67,20 @@ class User:
         else:
             raise Exception("Username must be a non-empty string.")
 
+    # delete if needed  
+    @classmethod
+    def delete_by_id(cls, id):
+        if type (id) == int and id > 0:
+            user = cls.find_by_id(id)
+            if user:
+                CURSOR.execute(f"DELETE FROM users WHERE id = {id}")
+                CONN.commit()
+                print(f"User {user.username} with ID {id} has been deleted.")
+            else:
+                raise Exception("Could not find user with that ID")
+        else: 
+            raise Exception ("ID must be an integer greater than 0")
+
     @classmethod
     def all(cls):
         sql = "SELECT * FROM users"
