@@ -1,6 +1,7 @@
 # Typing Test
 
 ## CLI Project (Python/SQL)
+### by: Halim Choi & Gabrielle Glasgow
 
 - Allows users to test and improve their overall typing abilities by tracking their speed and accuracy of words typed
 
