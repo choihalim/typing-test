@@ -14,8 +14,6 @@ class MainMenu:
     Score.create_table()
     
     options = ["[s] Start Game", "[c] Create User", "[v] View Scores", "[q] Quit"]
-
-    # menu_title = f"{Fore.YELLOW}Welcome to Typing Test!{Style.RESET_ALL} {Fore.YELLOW}Please select an option below.{Style.RESET_ALL}"
     menu_title = "\nWelcome to Typing Test! Please select an option below.\n"
     menu_cursor = "> "
     menu_cursor_style = ("fg_red", "bold")
@@ -28,13 +26,12 @@ class MainMenu:
         menu_cursor_style=menu_cursor_style,
         menu_highlight_style=menu_style,
         cycle_cursor=True,
-        # clear_screen=True,
     )
 
-    score_options = ["[s] Show All Scores", "[r] Return to Main Menu"]
+    score_options = ["[s] Show All Scores", "[f] Find Score by Username", "[r] Return to Main Menu"]
     score_submenu = TerminalMenu(
         score_options,
-        title="Scores",
+        title="\nScores Menu\n",
         menu_cursor=menu_cursor,
         menu_cursor_style=menu_cursor_style,
         menu_highlight_style=menu_style,
@@ -44,7 +41,7 @@ class MainMenu:
     user_options = ["[s] Start Game", "[r] Return to Main Menu"]
     user_submenu = TerminalMenu(
         user_options,
-        title="User",
+        title="\nUsers Menu\n",
         menu_cursor=menu_cursor,
         menu_cursor_style=menu_cursor_style,
         menu_highlight_style=menu_style,
@@ -66,31 +63,18 @@ class MainMenu:
         progress_bar.close()
         print(f"{Fore.GREEN}Game started!{Style.RESET_ALL}")
 
-    def print_scores():
+    def print_scores(scores):
         dot_line = "-" * 50
         print(dot_line)
         print("[ USER | WPM | ACCURACY | DATE ]")
-        if Score.all():
-            for score in Score.all():
+        if scores:
+            for score in scores:
                 user = User.find_by_id(score[1])
                 username = user.username if user else "Unknown User"
                 print(f"{username} | {score[2]} | {score[3]} | {score[4]}")
         else:
             print("No scores available yet...")
         print(dot_line)
-
-    # def print_scores():
-    #     dot_line = "-" * 50
-    #     print(dot_line)
-    #     print("[ USER | WPM | ACCURACY | DATE ]")
-    #     if Score.all():
-    #         for score in Score.all():
-    #             user = User.find_username_by_id(score[1])[0].strip("()").replace("'", "")
-    #             print(f' {user}, {", ".join(str(item) for item in score[2:])}')
-    #     else:
-    #         print("No scores available yet...")
-    #     print(dot_line)
-
 
     quitting = False
 
@@ -103,18 +87,17 @@ class MainMenu:
             print("\nGoodbye! Thanks for playing.\n")
 
         if options_choice == "[s] Start Game":
-            print("\nPlease create a user before you start the game.")
+            print(f"{Fore.RED}\nPlease create a user before you start the game.{Style.RESET_ALL}")
         
         if options_choice == "[c] Create User":
             ask_username = input("Please enter a username greater than 5 characters: ")
-            # added code to get by username if user exists
             existing_user = User.get_user_by_username(ask_username)
             if existing_user:
                 print(f"Welcome back, {ask_username}!")
                 user = existing_user
             else:
                 user = User.create(ask_username)
-                print(f"User {user} has been created...")
+                print(f"{Fore.GREEN}User {user.username} has been created...{Style.RESET_ALL}")
 
             user_index = user_submenu.show()
             user_choice = user_options[user_index]
@@ -127,4 +110,13 @@ class MainMenu:
             score_index = score_submenu.show()
             score_choice = score_options[score_index]
             if score_choice == "[s] Show All Scores":
-                print_scores()      
+                print_scores(Score.all())
+            if score_choice == "[f] Find Score by Username":
+                score_ask_username = input("Please enter the username: ")
+                existing_user = User.get_user_by_username(score_ask_username)
+                if existing_user:
+                    print(f"\nScores for {score_ask_username}:\n")
+                    print_scores(Score.find_by_username(score_ask_username))
+                else:
+                    print(f"{Fore.RED}\nUser not found. Please check that you have created user {score_ask_username}.{Style.RESET_ALL}")
+

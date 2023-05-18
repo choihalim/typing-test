@@ -16,11 +16,12 @@ class Game:
         self.set_user(user)
         self.set_words(self.generate_words())
 
-    # generates list of ten words
+    # generates list of words
     def generate_words(self):
         words = []
         api_url = 'https://api.api-ninjas.com/v1/randomword'
-        for _ in range(10):
+        # generate many words
+        for _ in range(100):
             response = requests.get(api_url, headers={'X-Api-Key': 'PF/hqSpAr1VyOEOUwNwYaA==HUK817VPrQuOaZgA'})
             if response.status_code == requests.codes.ok:
                 parsed_data = json.loads(response.text)
@@ -55,7 +56,7 @@ class Game:
             else:
                 os.system("clear")  # For Linux and macOS
 
-        def user_input(timeout=10):
+        def user_input(timeout=60):
             inputs = []
             index = 0
             end_time = time() + timeout
@@ -68,7 +69,7 @@ class Game:
                     word = self._words[index]
                     remaining_seconds = max(0, int(end_time - time()))
                     print(f"\rSeconds remaining: {remaining_seconds}\n\n{word}: ", end="")
-                    user_input = input()
+                    user_input = input("\n")
                     inputs.append(user_input)
                     index += 1
                     clear_screen()
@@ -93,10 +94,9 @@ class Game:
 
             return inputs
         
-        user_inputs = user_input(timeout=5)
+        # determine game time
+        user_inputs = user_input(timeout=60)
 
-        # calculate score here
-        # print("User inputs:", user_inputs)
         dot_line = "-" * 50
         print(f"User: {self._user.username}\n\nScore:")
         print(dot_line)
