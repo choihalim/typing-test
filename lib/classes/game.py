@@ -1,11 +1,11 @@
-# from . import CONN, CURSOR 
 from time import sleep, time
 from threading import Thread
+from classes.score import Score
+from classes.user import User
+from datetime import datetime
 import os
 import requests
 import json
-from score import Score
-from datetime import datetime
 
 class Game:
 
@@ -108,7 +108,6 @@ class Game:
         return self._user
 
     def set_user(self, user):
-        from user import User
         if isinstance(user, User):
             self._user = user
         else:
