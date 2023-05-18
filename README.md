@@ -1,5 +1,5 @@
 # Typing Test
-### by: Halim Choi & Gabrielle Glasgow
+## By: Halim Choi & Gabrielle Glasgow
 ## CLI Project (Python/SQL)
 
 
