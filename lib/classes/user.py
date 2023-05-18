@@ -12,8 +12,7 @@ class User:
 
     @username.setter
     def username(self, name):
-        if type(name) == str and 5 < len(name) < 15 and re.search(r'[A-Z]', name):
-            # re (regular expression) allows you to specify patterns
+        if type(name) == str and 5 < len(name) <= 15 :
             self._username = name
         else:
             raise Exception("Username must be a string with more than 5 characters, less than 15 characters, and include at least one uppercase letter.")
@@ -32,7 +31,8 @@ class User:
     def create(cls, username):
         existing_user = cls.find_by_username(username)
         if existing_user:
-            raise Exception("Username already exists. Please choose a different username.")
+            print(f"Welcome back, {username}!")
+            return existing_user
 
         user = User(username)
         CURSOR.execute(f"""
@@ -50,19 +50,6 @@ class User:
             new_user = CURSOR.execute(sql).fetchone()
             if new_user:
                 return cls.db_into_instance(new_user)
-            else:
-                raise Exception("Could not find User with that ID.")
-        else:
-            raise Exception("ID entered must be an integer greater than 0.")
-    
-    @classmethod
-    def find_username_by_id(cls, id):
-        if type(id) == int and id > 0:
-            sql = f"SELECT username FROM users WHERE id = {id}"
-            new_user = CURSOR.execute(sql).fetchone()
-            if new_user:
-                # return cls.db_into_instance(new_user)
-                return new_user
             else:
                 raise Exception("Could not find User with that ID.")
         else:
@@ -89,3 +76,7 @@ class User:
     @classmethod
     def db_into_instance(cls, user):
         return User(user[1], user[0])
+
+    @staticmethod
+    def get_user_by_username(username):
+        return User.find_by_username(username)

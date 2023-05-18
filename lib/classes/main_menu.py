@@ -72,11 +72,24 @@ class MainMenu:
         print("[ USER | WPM | ACCURACY | DATE ]")
         if Score.all():
             for score in Score.all():
-                user = User.find_username_by_id(score[1])[0].strip("()").replace("'", "")
-                print(f' {user}, {", ".join(str(item) for item in score[2:])}')
+                user = User.find_by_id(score[1])
+                username = user.username if user else "Unknown User"
+                print(f"{username} | {score[2]} | {score[3]} | {score[4]}")
         else:
             print("No scores available yet...")
         print(dot_line)
+
+    # def print_scores():
+    #     dot_line = "-" * 50
+    #     print(dot_line)
+    #     print("[ USER | WPM | ACCURACY | DATE ]")
+    #     if Score.all():
+    #         for score in Score.all():
+    #             user = User.find_username_by_id(score[1])[0].strip("()").replace("'", "")
+    #             print(f' {user}, {", ".join(str(item) for item in score[2:])}')
+    #     else:
+    #         print("No scores available yet...")
+    #     print(dot_line)
 
 
     quitting = False
@@ -94,8 +107,14 @@ class MainMenu:
         
         if options_choice == "[c] Create User":
             ask_username = input("Please enter a username greater than 5 characters: ")
-            user = User.create(ask_username)
-            print(f"User {user} has been created...")
+            # added code to get by username if user exists
+            existing_user = User.get_user_by_username(ask_username)
+            if existing_user:
+                print(f"Welcome back, {ask_username}!")
+                user = existing_user
+            else:
+                user = User.create(ask_username)
+                print(f"User {user} has been created...")
 
             user_index = user_submenu.show()
             user_choice = user_options[user_index]
