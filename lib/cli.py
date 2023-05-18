@@ -7,7 +7,7 @@ from time import sleep
 from colorama import Fore, Style
 import os
 
-class MainMenu:
+class Main:
     def clear_screen():
         if os.name == "nt":
             os.system("cls")  # For Windows
