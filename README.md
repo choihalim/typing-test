@@ -1,5 +1,5 @@
 # Typing Test
-## CLI Project (Python/SQL)
+### CLI Project (Python/SQL)
 #### By: Halim Choi & Gabrielle Glasgow
 
 
