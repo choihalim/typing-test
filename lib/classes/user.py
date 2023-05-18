@@ -54,6 +54,19 @@ class User:
                 raise Exception("Could not find User with that ID.")
         else:
             raise Exception("ID entered must be an integer greater than 0.")
+    
+    @classmethod
+    def find_username_by_id(cls, id):
+        if type(id) == int and id > 0:
+            sql = f"SELECT username FROM users WHERE id = {id}"
+            new_user = CURSOR.execute(sql).fetchone()
+            if new_user:
+                # return cls.db_into_instance(new_user)
+                return new_user
+            else:
+                raise Exception("Could not find User with that ID.")
+        else:
+            raise Exception("ID entered must be an integer greater than 0.")
 
     @classmethod
     def find_by_username(cls, username):

@@ -72,7 +72,8 @@ class MainMenu:
         print("[ USER | WPM | ACCURACY | DATE ]")
         if Score.all():
             for score in Score.all():
-                print(", ".join(str(item) for item in score))
+                user = User.find_username_by_id(score[1])[0].strip("()").replace("'", "")
+                print(f' {user}, {", ".join(str(item) for item in score[2:])}')
         else:
             print("No scores available yet...")
         print(dot_line)
