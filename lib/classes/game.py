@@ -21,7 +21,7 @@ class Game:
         words = []
         api_url = 'https://api.api-ninjas.com/v1/randomword'
         # generate many words
-        for _ in range(100):
+        for _ in range(60):
             response = requests.get(api_url, headers={'X-Api-Key': 'PF/hqSpAr1VyOEOUwNwYaA==HUK817VPrQuOaZgA'})
             if response.status_code == requests.codes.ok:
                 parsed_data = json.loads(response.text)
@@ -47,7 +47,7 @@ class Game:
         matching_elements = sum(1 for x, y in zip(attempted_words, copy_words) if x == y)
         accuracy = matching_elements / total_words * 100
         
-        return accuracy
+        return round(accuracy)
 
     def start_game(self):
         def clear_screen():

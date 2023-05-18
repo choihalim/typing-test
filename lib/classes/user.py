@@ -25,7 +25,7 @@ class User:
                 username TEXT
             )
         """)
-        print("Table creation attempted. Please check your console")
+        # print("Table creation attempted. Please check your console")
 
     @classmethod
     def create(cls, username):

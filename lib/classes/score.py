@@ -52,7 +52,7 @@ class Score:
                 FOREIGN KEY (user_id) REFERENCES users (id)
             )
         """)
-        print("Score table creation attempted. Please check your console")
+        # print("Score table creation attempted. Please check your console")
 
     @classmethod
     def create(cls, user_id, wpm, accuracy, date):
