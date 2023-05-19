@@ -6,6 +6,7 @@ from tqdm import tqdm
 from time import sleep
 from colorama import Fore, Style
 import os
+import pyfiglet
 
 class Main:
     def clear_screen():
@@ -14,6 +15,9 @@ class Main:
         else:
             os.system("clear")  # For Linux and macOS
     clear_screen()
+
+    ascii_banner = pyfiglet.figlet_format("Typing Test")
+    print(ascii_banner)
     User.create_table()
     Score.create_table()
     
@@ -35,7 +39,7 @@ class Main:
     score_options = ["[s] Show All Scores", "[f] Find Score by Username", "[r] Return to Main Menu"]
     score_submenu = TerminalMenu(
         score_options,
-        title="\nScores Menu\n",
+        title="\nScores\n",
         menu_cursor=menu_cursor,
         menu_cursor_style=menu_cursor_style,
         menu_highlight_style=menu_style,
@@ -45,7 +49,7 @@ class Main:
     user_options = ["[s] Start Game", "[r] Return to Main Menu"]
     user_submenu = TerminalMenu(
         user_options,
-        title="\nUsers Menu\n",
+        title="\nUsers\n",
         menu_cursor=menu_cursor,
         menu_cursor_style=menu_cursor_style,
         menu_highlight_style=menu_style,
@@ -81,7 +85,7 @@ class Main:
                 username = user.username if user else "Unknown User"
                 print(f"{username} | {score[2]} | {score[3]} | {score[4]}")
         else:
-            print("No scores available yet...")
+            print(f"\n{Fore.YELLOW}No scores found...\n{Style.RESET_ALL}")
         print(dot_line)
 
     def print_users(users):
@@ -91,6 +95,8 @@ class Main:
         if users:
             for user in users:
                 print(f"{user.username} | {len(Score.find_by_username(user.username))}")
+        else:
+            print(f"\n{Fore.YELLOW}No users found...\n{Style.RESET_ALL}")
         print(dot_line)
 
     quitting = False
@@ -105,10 +111,12 @@ class Main:
 
         if options_choice == "[s] Start Game":
             clear_screen()
+            print(ascii_banner)
             print(f"{Fore.RED}\nPlease create a user before you start the game.{Style.RESET_ALL}")
         
         if options_choice == "[c] Create User":
             clear_screen()
+            print(ascii_banner)
             ask_username = input(f"\n{Fore.YELLOW}Please enter a username greater than 5 characters: {Style.RESET_ALL}")
             existing_user = User.get_user_by_username(ask_username)
             if existing_user:
@@ -131,6 +139,7 @@ class Main:
 
         if options_choice == "[v] View Scores":
             clear_screen()
+            print(ascii_banner)
             score_index = score_submenu.show()
             score_choice = score_options[score_index]
             if score_choice == "[s] Show All Scores":
@@ -146,5 +155,7 @@ class Main:
 
         if options_choice == "[u] View Users":
             clear_screen()
+            print(ascii_banner)
             print_users(User.all())
+
 
